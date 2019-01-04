@@ -1,30 +1,28 @@
-code = """
+trojanLogin = """
+userPass = input("What is the password? ")
 
+if userPass == "123":
+    print("You may enter")
+elif userPass == "NSA":
+    # The bogus backdoor
+    print("You may enter")
+else:
+    print("Go away")
+"""
 
+trojanCompiler = """
+from sys import argv
 
-
-
-
-
-
-
-
-
-
-def unescape(char):
-    if char == "\"":
-        return "\\\""
-    else:
-        return char
-
-
-def get_trojan_compiler_code():
-    trojanCompiler = 'code = \"\"\"'
-    for char in code:
-        trojanCompiler += unescape(char)
-    trojanCompiler += '\"\"\"'
-    trojanCompiler += code
-    return trojanCompiler
+def get_trojan_compiler():
+    tripQuotes = chr(34) + chr(34) + chr(34)
+    tC = 'trojanLogin = ' + tripQuotes
+    tC += trojanLogin
+    tC += tripQuotes + chr(10) + chr(10)
+    tC += 'trojanCompiler = ' + tripQuotes
+    tC += trojanCompiler
+    tC += tripQuotes + chr(10)
+    tC += trojanCompiler
+    return tC
 
 with open("HonestCompiler.py", "r") as f:
     honestCompiler = f.read()
@@ -32,14 +30,11 @@ with open("HonestCompiler.py", "r") as f:
 with open("HonestLogin.py", "r") as f:
     honestLogin = f.read()
 
-# TODO You really can't ship the trojan code with the compiler #RedFlag
-with open("TrojanLogin.py", "r") as f:
-    trojanLogin = f.read()
+with open(argv[1], "r") as f:
+    inProgram = f.read()
 
-inProgram = input("Enter a program here: ")
-
-if inProgram == "1234567890":#honestCompiler:
-    outProgram = get_trojan_compiler_code()
+if inProgram == honestCompiler:
+    outProgram = get_trojan_compiler()
 
 elif inProgram == honestLogin:
     outProgram = trojanLogin
@@ -48,24 +43,21 @@ else:
     # Normal case
     outProgram = inProgram
 
-print("The compiled program is:")
 print(outProgram)
 """
 
-def unescape(char):
-    if char == "\"":
-        return "\\\""
-    else:
-        return char
+from sys import argv
 
-
-def get_trojan_compiler_code():
-    trojanCompiler = 'code = """'
-    for char in code:
-        trojanCompiler += unescape(char)
-    trojanCompiler += '"""'
-    trojanCompiler += code
-    return trojanCompiler
+def get_trojan_compiler():
+    tripQuotes = chr(34) + chr(34) + chr(34)
+    tC = 'trojanLogin = ' + tripQuotes
+    tC += trojanLogin
+    tC += tripQuotes + chr(10) + chr(10)
+    tC += 'trojanCompiler = ' + tripQuotes
+    tC += trojanCompiler
+    tC += tripQuotes + chr(10)
+    tC += trojanCompiler
+    return tC
 
 with open("HonestCompiler.py", "r") as f:
     honestCompiler = f.read()
@@ -73,14 +65,11 @@ with open("HonestCompiler.py", "r") as f:
 with open("HonestLogin.py", "r") as f:
     honestLogin = f.read()
 
-# TODO You really can't ship the trojan code with the compiler #RedFlag
-with open("TrojanLogin.py", "r") as f:
-    trojanLogin = f.read()
+with open(argv[1], "r") as f:
+    inProgram = f.read()
 
-inProgram = input("Enter a program here: ")
-
-if inProgram == "1234567890":#honestCompiler:
-    outProgram = get_trojan_compiler_code()
+if inProgram == honestCompiler:
+    outProgram = get_trojan_compiler()
 
 elif inProgram == honestLogin:
     outProgram = trojanLogin
@@ -89,5 +78,4 @@ else:
     # Normal case
     outProgram = inProgram
 
-print("The compiled program is:")
 print(outProgram)
